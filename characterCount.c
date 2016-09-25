@@ -8,5 +8,6 @@ main()
   while (getchar() != EOF){
     ++nc; 
     printf("%ld\n", nc);
+    /*The conversion specification %ld tells printf that the corresponding argument is a long integer*/
   }
 }
