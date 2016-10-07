@@ -1,8 +1,9 @@
 #include <stdio.h> 
 #include <unistd.h> 
 
+int favNum=84;  
 int main(int argc, char *argv[]){
-  printf("helloExec.c:\n"); 
+  printf("helloExec.c: favnum is %d\n", favNum); 
   printf(" My PID %d.\n", getpid()); 
 
   printf(" My arguments: "); 

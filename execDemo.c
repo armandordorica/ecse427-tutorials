@@ -2,9 +2,18 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+
+int favNum=42; 
+
 int main (int argc, char *argv[])
 {
   printf("execDemo: My pid is %d.\n", getpid());
+
+  //Different types of execL execl and execv
+  //With L: comma separated arguments 
+  //With V: Vector (i.e. an array of strings)
+  //With P: include normal search path for executable 
+
   /*first come up with the arguments for your execvp. The syntax is the following: 
     int execvP(const char *file, const char *search_path, char *const argv[]); 
     The exec family of functions replaces the current process image with a new process
