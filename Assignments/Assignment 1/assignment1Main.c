@@ -7,6 +7,7 @@ int getcmd(char *prompt, char *args[], int *background)
 {
   printf("Inside getcmd function\n"); 
   int length, i=0; //length measures how long the input string into args[0] is 
+  //i is the number of tokens that your getcmd function dissected 
   char *token, *loc; 
   char *line = NULL; 
   size_t linecap = 0; 
@@ -15,7 +16,7 @@ int getcmd(char *prompt, char *args[], int *background)
   //of what the command is. However it changes its value every time you reexecute the code 
 
 
-  length = getline(&line, &linecap, stdin);
+  length = getline(&line, &linecap, stdin);//blocks the program until you enter something
   printf("length is %d\n", length); 
 
   if (length <= 0) {
@@ -65,10 +66,10 @@ int main (void)
       printf("args[1] = %s\n", args[1]);
       // printf("args[159] = %s\n", args[159]);
 
-      //  int i=0; 
-      // for (i=0; i<sizeof(args); i++){
-      //   printf("args[%d] is %d\n", i, args[i]);
-      // }
+       int i=0; 
+      for (i=0; i<sizeof(args); i++){
+        printf("args[%d] is %d\n", i, args[i]);
+      }
 
        // char *args[] = {"./helloExec", "Hello", "World", NULL};
       // char *args[] = {"./helloExec", NULL};
@@ -85,10 +86,12 @@ int main (void)
     printf("after execvp\n");
     exit(1); 
     }else{
-      int status; 
+      int status = 1;  
       printf("Status is %d\n", status); 
       printf("Waiting for child to complete execution.\n");
       waitpid(pid, &status, 0); //patent waits for child to complete its execution
+      //waitpid waits for an integer space that it can write to 
+        printf("Status after waitpid is %d\n", status); 
 
     /*the steps can be ...: 
     (1) fork a child using fork ()
