@@ -8,12 +8,15 @@ int main(){
   printf("fd: %d\n", fd);
   close(1);
   
+  //need to access the part of character pointer to the string containing whatever was
+  //right after > sign and put it instead of 
   open("temp2.txt", O_WRONLY | O_APPEND);
   if (fork() == 0){
 
-  close(1); 
-  int n = dup(fd); 
-  printf("dup(fd) is %d\n", n);
+  // close(1); 
+  // dup(fd); 
+  // int n = 
+  // printf("dup(fd) is %d\n", n);
   printf("message from A\n");
   // write("hello"); 
   }

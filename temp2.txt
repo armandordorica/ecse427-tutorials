@@ -1,1 +1,4 @@
 message from B
+message from A
+message from B
+message from A
