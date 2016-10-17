@@ -1,0 +1,52 @@
+//a double array (There is a picture about this on my phone)
+
+#define HISTORY_SIZE 10
+#define ARGS_ARRAY_SIZE 20
+#define JOBS_ARRAY_SIZE 20 
+
+the type of this buffer is a character pointer buffer 
+This approach allows you to create a struct to make a joblist and a history. 
+
+struct history_t 
+{ 
+char* buffer[HISTORY_SIZE][ARGES_ARRAY_SIZE]; 
+int currentCmd; //how many commands you entered 
+//you don't need to remove elements, you only overwrite them using %10 command to 
+} History; 
+
+typedef struct joblist_t
+{
+  char jobs[JOBS_ARRAY_SIZE][ARGS_ARRAY_SIZE]; 
+  pid_t pids [JOBS_ARRAY_SIZE];
+} Joblist; 
+
+History hist; 
+JobList joblist; 
+
+//this is useless 
+int indx_abs(int i) {
+  return i>0 ? i: -i; 
+}
+
+you need to be able to enter new commands and fetch the entire history. you want to be able to input a command to print all the commands in memory
+
+//Keep the number of the command that you are at by doing currentcommand%10 since this is gonna allow you to wrap around where 10 is the #defined HISTORY_SIZE 
+
+//You need to free memory allocated by pointers that points to the characters in the array containing the commands 
+
+I want to free memory when i overwrite the entries in the two dimensional array of HISTORY_SIZE and ARGS_ARRAY_SIZE 
+
+If current command is greater than the history size? That tells you whether you're overriding slots in the arrays. You can use null pointers. 
+How can you free only one dimension of the array, since the array itself is two dimensional?
+
+First thing you want to do is to initialize your data structure. 
+
+free(hist.buffer[0][0])
+for (int i = 0; i < SIZE_OF_ARGS; i++) //iterate over all the entries in the buffer
+{ 
+  hist.buffer[0][i];
+
+}
+
+waitpid(pid, &status, 0); use 1
+everytime you execute a child, you get its pid

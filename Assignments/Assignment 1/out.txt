@@ -1,0 +1,27 @@
+::a double array (There is a picture about this on
+a.out
+assignment1Main
+assignment1Main.c
+declarations.h
+execDemo
+execDemo.c
+fork_exec
+fork_exec.c
+functions.h
+helloExec
+helloExec.c
+mini_PA1.pdf
+out.txt
+passingArrays
+passingArrays.c
+pipingWithDup
+pipingWithDup.c
+redirectionParentToChild
+redirectionParentToChild.c
+redirectionWithPipes
+redirectionWithPipes.c
+spaceReplacement
+spaceReplacement.c
+stringConcatenation
+stringConcatenation.c
+testDirectory
