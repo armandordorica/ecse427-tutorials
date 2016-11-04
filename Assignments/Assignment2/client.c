@@ -11,23 +11,27 @@
 int main (int argc, char *argv[])
 {
 
+typedef struct {
+    int id; 
+    key_t key; 
+    char* address; 
+    char* contentCounter;
+}SharedMemory; 
+
+SharedMemory sharedMemory;
     /*shared memory id is shmid. This is the return value from shmget()*/
-    int shmid; 
     //A shared memory segment is described by a control structure with a unique ID that points to an area of physical memory. 
     //the identifier of the segment is called the shmid. 
     /*The structure definition for the shared memory segment control structures and prototypes can be found in 
     <sys/shm.h> */
 
-    key_t key; 
     /*The key argument is an access value associated with the semaphore ID. This key will be passed to shmget(), 
     which will create a shared memory segment.*/ 
-    char *shm;
-    char *s;
 
-    key = 9876; 
-    shmid = shmget(key, SHSIZE, 0666);
+    sharedMemory.key = 9876; 
+    sharedMemory.id = shmget(sharedMemory.key, SHSIZE, 0666);
     /*Client doesn't create anything, so get rid of IPC_CREAT | */ 
-    if(shmid < 0)
+    if(sharedMemory.id < 0)
     {
         /*Upon successful completion of shmget, a positive shared memory segment identifier is returned. 
         Otherwise, -1 is returned and the global variable errno is set to indicate the error*/ 
@@ -35,7 +39,8 @@ int main (int argc, char *argv[])
         exit(1);
     }
     
-    shm = shmat(shmid, NULL, 0); 
+    
+    sharedMemory.address = shmat(sharedMemory.id, NULL, 0); 
     /* Basic syntax is void *shmat(int shmid, const void *shmaddr, int shmflg);
 
     shmat() Maps the shared memory segment associated with the shared memory identifier shmid into 
@@ -47,20 +52,20 @@ int main (int argc, char *argv[])
     address space when successful. Otherwise, a value of -1 is returned and the global variable errno is 
     set to indicate the error. */
 
-    if(shm == (char *) -1)
+    if(sharedMemory.address == (char *) -1)
     {
         perror("shmat");
         exit(1); 
     }
 
 //Reads the content of the shared memory and prints it 
-    for(s = shm; *s != 0; s++)
-        printf("%c", *s);
+    for(sharedMemory.contentCounter = sharedMemory.address; *sharedMemory.contentCounter != 0; sharedMemory.contentCounter++)
+        printf("%c", *sharedMemory.contentCounter);
 
     printf("\n");
 
 //Shares the first character in the shared memory to an asterisk
-    *shm = '*';
+    *sharedMemory.address = '*';
 
     return 0; 
 } 

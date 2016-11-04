@@ -12,26 +12,32 @@
 int main (int argc, char *argv[])
 {
 
+    typedef struct {
+    int id; 
+    key_t key; 
+    char* address; 
+    char* contentCounter;
+}SharedMemory; 
+
+SharedMemory sharedMemory;
+
+
     /*shared memory id is shmid. This is the return value from shmget()*/
-    int shmid; 
     //A shared memory segment is described by a control structure with a unique ID that points to an area of physical memory. 
     //the identifier of the segment is called the shmid. 
     /*The structure definition for the shared memory segment control structures and prototypes can be found in 
     <sys/shm.h> */
 
-    key_t key; 
     /*The key argument is an access value associated with the semaphore ID. This key will be passed to shmget(), 
     which will create a shared memory segment.*/ 
-    char *shm;
-    char *s;
 
-    key = 9876; 
+    sharedMemory.key = 9876; 
     
-    shmid = shmget(key, SHSIZE, IPC_CREAT | 0666);
-    printf("shmid is: %d", shmid); 
+    sharedMemory.id = shmget(sharedMemory.key, SHSIZE, IPC_CREAT | 0666);
+    printf("sharedMemory.id is: %d", sharedMemory.id); 
     /*shmget() is used to obtain access to a shared memory segment. The syntax is: 
     int shmget(key_t key, size_t size, int shmflg);*/ 
-    if(shmid < 0)
+    if(sharedMemory.id < 0)
     {
         /*Upon successful completion of shmget, a positive shared memory segment identifier is returned. 
         Otherwise, -1 is returned and the global variable errno is set to indicate the error*/ 
@@ -39,7 +45,7 @@ int main (int argc, char *argv[])
         exit(1);
     }
     
-    shm = shmat(shmid, NULL, 0); 
+    sharedMemory.address  = shmat(sharedMemory.id, NULL, 0); 
     /* Basic syntax is void *shmat(int shmid, const void *shmaddr, int shmflg);
 
     shmat() Maps the shared memory segment associated with the shared memory identifier shmid into 
@@ -51,22 +57,22 @@ int main (int argc, char *argv[])
     address space when successful. Otherwise, a value of -1 is returned and the global variable errno is 
     set to indicate the error. */
 
-    if(shm == (char *) -1)
+    if(sharedMemory.address == (char *) -1)
     {
         perror("shmat");
         exit(1); 
     }
 
     /*writing something to the shared memory*/ 
-    memcpy(shm, "Hello World", 11); 
+    memcpy(sharedMemory.address, "Hello World", 11); 
 
-    s = shm; 
-    s += 11; 
+    sharedMemory.contentCounter = sharedMemory.address; 
+    sharedMemory.contentCounter += 11; 
 
 //Add a null or a zero at the end of the string contained in our shared memory
-    *s = 0; 
+    *sharedMemory.contentCounter = 0; 
 
-    while(*shm != '*')
+    while(*sharedMemory.address != '*')
     sleep(1); 
 
     return 0; 
