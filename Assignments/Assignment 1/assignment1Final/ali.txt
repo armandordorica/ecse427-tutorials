@@ -1,0 +1,6 @@
+ali.txt
+assignment1Main
+assignment1Main.c
+declarations.h
+functions.h
+out.txt

@@ -4,6 +4,8 @@
 
 int main(){
 
+
+
   int fd = dup(1); 
   printf("fd: %d\n", fd);
   close(1);
@@ -14,11 +16,12 @@ int main(){
   if (fork() == 0){
 
   // close(1); 
-  // dup(fd); 
+  // dup(fd);   
   // int n = 
   // printf("dup(fd) is %d\n", n);
   printf("message from A\n");
   // write("hello"); 
+    execvp(args[0], args);
   }
   else{  
     printf("message from B\n");

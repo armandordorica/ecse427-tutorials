@@ -19,6 +19,7 @@
 
 
 
+
 int getcmd(char *prompt, char *args[], int *bg, int *historyflag, int *outputflag, int *pipingflag, char* line1)
 {
    int length, i = 0;
