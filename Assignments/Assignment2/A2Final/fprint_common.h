@@ -112,5 +112,5 @@ SharedMemory *attach_shared_memory(int fd){
 }
 
 
-extern int setup_shared_memory(); 
-extern SharedMemory *attach_shared_memory(int fd); 
+// extern int setup_shared_memory(); 
+// extern SharedMemory *attach_shared_memory(int fd); 
