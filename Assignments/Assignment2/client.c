@@ -21,6 +21,7 @@ int attach_shared_memory(){
     return 0;
 }
 
+
 void handler(int signo){
     int temp;
     sem_getvalue(&shared_mem->binary, &temp);

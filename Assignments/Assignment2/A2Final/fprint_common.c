@@ -1,9 +1,45 @@
-#include "common.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include <unistd.h>
+#include <semaphore.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <fcntl.h>
+#include <signal.h>
 
-int fd;
-int errno;
-Shared* shared_mem;
+#define BUFFER_SIZE 10
+#define MY_SHM "/ARMANDO"
+
+typedef struct
+{
+  int pages;
+  int jobID;
+} Job;
+
+typedef struct
+{
+  /*variables for semaphores*/
+  sem_t jobsInQueue;
+  sem_t spotsAvailable;
+  sem_t mutex;
+  /*elements needed to treat the SharedMemory segment as a queue*/ 
+  int jobCount;
+  int head;
+  int tail;
+  int memorySize; 
+  int numPrinters; 
+  int JobIdArray[BUFFER_SIZE]; 
+  int jobPages[BUFFER_SIZE]; 
+} SharedMemory;
+
+/*extern SharedMemory *attach_shared_memory(int fd); 
+extern int setup_shared_memory()
+By using 'extern', you are telling the compiler that whatever follows it will be found (non-static) 
+at link time, don't reserve anything for it since it will be encountered later.
+It's very useful if you need to share some global between modules and don't want to put / initialize it in a header.
+Technically, every function in a library public header is 'extern', however labeling them as such has very 
+little to no benefit, depending on the compiler. Most compilers can figure that out on their own*/
 
 int setup_shared_memory(){
     /*shm_open() creates and opens a new, or opens an existing, POSIX shared memory object. 
@@ -18,7 +54,6 @@ int setup_shared_memory(){
     or O_RDWR and any of the other flags. 
     S_IRWXU is the unix file mode (i.e. 0666)
     */  
-
     if(fd == -1){
         printf("shm_open() failed\n");
         exit(1);
@@ -29,13 +64,26 @@ int setup_shared_memory(){
     This function will cause the file referenced by fildes, to
      be truncated (or extended) to length bytes in size. 
      */ 
-
+     return fd; 
 }
 
-int attach_shared_memory(){
+SharedMemory *attach_shared_memory(int fd){
     /* you need to cast this function to be able to match the shared_mem variable which is a 
     struct of type Shared*/ 
-    shared_mem = (Shared*)  mmap(NULL, sizeof(Shared), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    SharedMemory *shared_mem = (SharedMemory *)mmap(
+        NULL, 
+        /*If addr is NULL, then the kernel chooses the address at  which  to
+       create the mapping; this is the most portable method of creating a
+       new mapping.  If addr is not NULL, then the kernel takes it  as  a
+       hint  about where to place the mapping; on Linux, the mapping will
+       be created at a nearby page boundary.  The address of the new map‐
+       ping is returned as the result of the call.*/
+        sizeof(SharedMemory), 
+        PROT_READ | PROT_WRITE, 
+        MAP_SHARED, 
+        fd, 
+        0);
+
     /*The mmap() system call causes the pages starting at NULL and continuing for at most sizeof(Shared) bytes to be mapped from the
     object described by fd, starting at byte 0.
     Syntax is      
@@ -57,32 +105,5 @@ int attach_shared_memory(){
         exit(1);
     }
 
-    return 0;
-}
-
-int init_shared_memory() {
-    shared_mem->data = 0;
-    shared_mem->readcount = 0;
-    sem_init(&(shared_mem->resource), 1, 1);
-    sem_init(&(shared_mem->binary), 1, 1);
-}
-
-int main() {
-    setup_shared_memory();
-    attach_shared_memory();
-
-    init_shared_memory();
-    
-    while (1) {
-        sem_wait(&shared_mem->resource);
-        printf("changing data from %d\n", shared_mem->data);
-        shared_mem->data = shared_mem->data + 1;
-        sleep(1);
-        shared_mem->data = shared_mem->data * 2;
-        printf("to %d\n", shared_mem->data);
-        sem_post(&shared_mem->resource);
-        sleep(1);
-    }
-
-    return 0;
+    return shared_mem;
 }
