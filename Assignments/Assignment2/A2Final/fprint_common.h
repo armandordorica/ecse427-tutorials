@@ -7,9 +7,7 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 #include <signal.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
-#include <fcntl.h>   
+
 
 #define BUFFER_SIZE 10
 #define MY_SHM "/ARMANDO"
@@ -115,3 +113,4 @@ SharedMemory *attach_shared_memory(int fd){
 
 
 extern setup_shared_memory(); 
+extern SharedMemory *attach_shared_memory(int fd); 
