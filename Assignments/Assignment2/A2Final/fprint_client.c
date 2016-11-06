@@ -15,10 +15,10 @@ void getJob()
     scanf("%d", &numPages); 
 }
 
-void enqueue(){
+int enqueue(){
     int index = (mySharedMemory->tail) % (mySharedMemory->memorySize); 
     mySharedMemory->jobPages[index] = numPages; 
-    mySharedMemory->tail = i+1; 
+    mySharedMemory->tail = index + 1; 
     return mySharedMemory->jobIdArray[index] = mySharedMemory->jobCount++; 
 }
 
@@ -35,11 +35,12 @@ int main()
  //perform semaphore operations to ensure mutual exclusion and add job to queue
  sem_wait(&mySharedMemory->spotsAvailable); /*decrease spots available in buffer*/ 
  sem_wait(&mySharedMemory->mutex); /*Decrease the mutex*/ 
- /*enqueue()*/ 
+
+ /*enqueue(). put_a_job(&job) - put the job record into the shared memory*/ 
  jobId = enqueue(); 
 
  sem_post(&mySharedMemory->mutex); /*increase the mutex*/
- sem_post(&mySharedMemory->jobsInQueue) /*Increase number of jobs in queue*/ 
+ sem_post(&mySharedMemory->jobsInQueue); /*Increase number of jobs in queue*/ 
 
  printf("Client request:\n %d Pages to print: \n Job ID: %d ", numPages, jobId);
 
@@ -58,10 +59,10 @@ int main()
        contain any mapped pages.
 */ 
 
+/*release_shared_mem(); //release the shared memory*/ 
+
 munmap(MY_SHM, sizeof(SharedMemory)); 
  exit(0); 
-
-
 
 
 }
