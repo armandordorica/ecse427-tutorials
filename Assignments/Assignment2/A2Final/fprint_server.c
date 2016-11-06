@@ -1,4 +1,4 @@
-#include "fprint_common.c"
+#include "fprint_common.h"
 
 #define SECONDS_PER_PAGE 1 
 
@@ -71,6 +71,30 @@ int main(int argc, char *argv[])
     fd = setup_shared_memory(); 
     mySharedMemory = attach_shared_memory(fd);
 
+    if (mySharedMemory->numPrinters == 0)
+    {
+        int memorySize = BUFFER_SIZE;
+
+        if(argc > 1)
+        {
+            memorySize = atoi(argv[1]); 
+        }
+        else 
+        {
+            print ("Memory size was not specified. The fault memory size will be set to %d slots.\n", BUFFER_SIZE);
+        }
+        void initialize_shared_memory(memorySize);
+    }
+
+    else if (argc > 1)
+    { 
+        printf("Cannot reinitialize memory size. Another printer has already set it to %d slots.\n", mySharedMemory->memorySize);
+    }
+
+    printerId = mySharedMemory->numPrinters++; 
+
+    printf("Printer: %d\t has been initialized.\n", printerId); 
+
 
 
     while(1){
@@ -83,7 +107,7 @@ int main(int argc, char *argv[])
         */ 
         sem_wait(&mySharedMemory->jobsInQueue); 
         sem_wait(&mySharedMemory->mutex);
-        /*dequeue*/ 
+        dequeue(); 
         sem_post(&mySharedMemory->mutex); 
         sem_post(&mySharedMemory->spotsAvailable); 
 
