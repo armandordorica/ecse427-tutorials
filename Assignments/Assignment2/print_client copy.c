@@ -4,22 +4,32 @@
 #include <sys/types.h> 
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#include <unistd.h>
+
+/*
+while(1){ }
+if(numJobs = BUF_SIZE){ 
+    fullBuffer = true; 
+}
+
+if(fullBuffer){ 
+    sleep(); 
+}
+
+
+if(){
+
+}
+
+} 
+*/ 
 
 //Defining the size of the shared memory
-#define SHSIZE 100
+#define BUF_SIZE 100
 
 int main (int argc, char *argv[])
 {
 
-    typedef struct {
-    int id; 
-    key_t key; 
-    char* address; 
-    char* contentCounter;
-}SharedMemory; 
-
-SharedMemory sharedMemory;
+#include "printCommon.h"
 
 
     /*shared memory id is shmid. This is the return value from shmget()*/
@@ -30,13 +40,10 @@ SharedMemory sharedMemory;
 
     /*The key argument is an access value associated with the semaphore ID. This key will be passed to shmget(), 
     which will create a shared memory segment.*/ 
-
+    sharedMemory.size = BUF_SIZE;
     sharedMemory.key = 9876; 
-    
-    sharedMemory.id = shmget(sharedMemory.key, SHSIZE, IPC_CREAT | 0666);
-    printf("sharedMemory.id is: %d", sharedMemory.id); 
-    /*shmget() is used to obtain access to a shared memory segment. The syntax is: 
-    int shmget(key_t key, size_t size, int shmflg);*/ 
+    sharedMemory.id = shmget(sharedMemory.key, sharedMemory.size, 0666);
+    /*Client doesn't create anything, so get rid of IPC_CREAT | */ 
     if(sharedMemory.id < 0)
     {
         /*Upon successful completion of shmget, a positive shared memory segment identifier is returned. 
@@ -45,7 +52,8 @@ SharedMemory sharedMemory;
         exit(1);
     }
     
-    sharedMemory.address  = shmat(sharedMemory.id, NULL, 0); 
+    
+    sharedMemory.address = shmat(sharedMemory.id, NULL, 0); 
     /* Basic syntax is void *shmat(int shmid, const void *shmaddr, int shmflg);
 
     shmat() Maps the shared memory segment associated with the shared memory identifier shmid into 
@@ -63,17 +71,14 @@ SharedMemory sharedMemory;
         exit(1); 
     }
 
-    /*writing something to the shared memory*/ 
-    memcpy(sharedMemory.address, "Hello World", 11); 
+//Reads the content of the shared memory and prints it 
+    for(sharedMemory.contentCounter = sharedMemory.address; *sharedMemory.contentCounter != 0; sharedMemory.contentCounter++)
+        printf("%c", *sharedMemory.contentCounter);
 
-    sharedMemory.contentCounter = sharedMemory.address; 
-    sharedMemory.contentCounter += 11; 
+    printf("\n");
 
-//Add a null or a zero at the end of the string contained in our shared memory
-    *sharedMemory.contentCounter = 0; 
-
-    while(*sharedMemory.address != '*')
-    sleep(1); 
+//Shares the first character in the shared memory to an asterisk
+    *sharedMemory.address = '*';
 
     return 0; 
 } 
