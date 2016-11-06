@@ -37,6 +37,7 @@ typedef struct
   int jobPages[BUFFER_SIZE]; 
 } SharedMemory;
 
+
 /*extern SharedMemory *attach_shared_memory(int fd); 
 extern int setup_shared_memory()
 By using 'extern', you are telling the compiler that whatever follows it will be found (non-static) 
@@ -111,3 +112,6 @@ SharedMemory *attach_shared_memory(int fd){
 
     return shared_mem;
 }
+
+
+extern setup_shared_memory(); 
