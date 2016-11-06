@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
         {
             printf("Memory size was not specified. The fault memory size will be set to %d slots.\n", BUFFER_SIZE);
         }
-        void initialize_shared_memory(memorySize);
+        initialize_shared_memory(memorySize);
     }
 
     else if (argc > 1)
