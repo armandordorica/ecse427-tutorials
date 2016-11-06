@@ -75,13 +75,13 @@ int main(int argc, char *argv[])
     {
         int memorySize = BUFFER_SIZE;
 
-        if(argc > 1)
+        if(argc < 1)
         {
             memorySize = atoi(argv[1]); 
         }
         else 
         {
-            printf("Memory size was not specified. The fault memory size will be set to %d slots.\n", BUFFER_SIZE);
+            printf("Memory size was not specified. The default memory size will be set to %d slots.\n", BUFFER_SIZE);
         }
         initialize_shared_memory(memorySize);
     }
