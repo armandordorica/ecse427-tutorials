@@ -33,7 +33,7 @@ typedef struct
   int tail;
   int memorySize; 
   int numPrinters; 
-  int JobIdArray[BUFFER_SIZE]; 
+  int jobIdArray[BUFFER_SIZE]; 
   int jobPages[BUFFER_SIZE]; 
 } SharedMemory;
 
