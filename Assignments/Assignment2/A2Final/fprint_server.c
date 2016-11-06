@@ -9,7 +9,7 @@ int errno;
 int printerId; 
 
 void initialize_shared_memory(int memorySize){ 
-    printf("Setting un shared memory with %d slots\n", memorySize); 
+    printf("Setting up shared memory with %d slots\n", memorySize); 
     mySharedMemory->memorySize = memorySize; 
     mySharedMemory->head=0; 
     mySharedMemory->tail=0; 
@@ -39,7 +39,7 @@ void printJob()
         print_a_msg(&job);
         duration of job, job ID, and source of job are printed
         */
-    printf("Job duration: %d seconds. \n Job ID is: %d .\n Source printer: %d\n.", myjob.pages, myjob.jobID, printerId); 
+    printf("Job duration: %d seconds. \nJob ID is: %d .\nSource printer: %d\n.", myjob.pages, myjob.jobID, printerId); 
     printf("Printing...\n");
     sleep(SECONDS_PER_PAGE * myjob.pages); 
     printf("Job ID: %d, Source printer: %d COMPLETED\n...", myjob.jobID, printerId); 
@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 
     printerId = mySharedMemory->numPrinters++; 
 
-    printf("Printer: %d\t has been initialized.\n", printerId); 
+    printf("Printer with ID %d\t has been initialized.\n", printerId); 
 
 
 

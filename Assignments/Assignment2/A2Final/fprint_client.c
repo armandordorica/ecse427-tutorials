@@ -42,7 +42,7 @@ int main()
  sem_post(&mySharedMemory->mutex); /*increase the mutex*/
  sem_post(&mySharedMemory->jobsInQueue); /*Increase number of jobs in queue*/ 
 
- printf("CLIENT REQUEST \n%d Pages to print: \nJob ID: %d ", numPages, jobId);
+ printf("CLIENT REQUEST \nPages to print: %d \nJob ID: %d \n", numPages, jobId);
 
 
 /*   The munmap() system call deletes the mappings  for  the  specified
