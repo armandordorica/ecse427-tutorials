@@ -7,9 +7,13 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <fcntl.h>   
 
 #define BUFFER_SIZE 10
 #define MY_SHM "/ARMANDO"
+int fd; 
 
 typedef struct
 {
