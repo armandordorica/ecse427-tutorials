@@ -45,7 +45,7 @@ int setup_shared_memory(){
     /*shm_open() creates and opens a new, or opens an existing, POSIX shared memory object. 
     A POSIX shared memory object is in effect a handle which can be used by unrelated processes to mmap(2) 
     the same region og shared memory*/
-    fd = shm_open(MY_SHM, O_CREAT | O_RDWR, S_IRWXU);
+   int fd = shm_open(MY_SHM, O_CREAT | O_RDWR, S_IRWXU);
     /*MY_SHM specifies the shared memory object to be created or opened. For portable use,
     a shared memory object should be identifies by a name of the form /somename; that is, a null-terminated
     string of up to NAME_MAX (i.e., 255) characters consisting of an initial slash, followed by one or more characters, 
@@ -58,7 +58,7 @@ int setup_shared_memory(){
         printf("shm_open() failed\n");
         exit(1);
     }
-    ftruncate(fd, sizeof(Shared));
+    ftruncate(fd, sizeof(SharedMemory));
     /* for ftruncate, the syntax is int
     ftruncate(int fildes, off_t length);
     This function will cause the file referenced by fildes, to
