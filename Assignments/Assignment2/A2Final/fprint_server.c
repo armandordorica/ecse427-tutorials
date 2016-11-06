@@ -39,7 +39,7 @@ void printJob()
         print_a_msg(&job);
         duration of job, job ID, and source of job are printed
         */
-    printf("Job duration: %d seconds. \nJob ID is: %d .\nSource printer: %d\n.", myjob.pages, myjob.jobID, printerId); 
+    printf("Job duration: %d seconds. \nJob ID is: %d .\nSource printer: %d\n", myjob.pages, myjob.jobID, printerId); 
     printf("Printing...\n");
     sleep(SECONDS_PER_PAGE * myjob.pages); 
     printf("Job ID: %d, Source printer: %d COMPLETED\n...", myjob.jobID, printerId); 
@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     {
         int memorySize = BUFFER_SIZE;
 
-        if(argc < 1)
+        if(argc > 1)
         {
             memorySize = atoi(argv[1]); 
         }
